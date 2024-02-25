@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+
+// Components
 import ButtonBar from '../../components/ButtonBar';
 
 const Home = () => {
