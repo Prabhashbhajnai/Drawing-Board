@@ -29,7 +29,7 @@ const Button = ({ type }) => {
     return (
         <div
             onClick={handleClick}
-            className={`flex justify-center items-center bg-slate-500 w-16 h-16 cursor-pointer rounded-b-lg hover:bg-slate-700 ${isPencil && type.name === 'pencil' ? 'bg-slate-600' : ''} ${isEraser && type.name === 'eraser' ? 'bg-slate-600' : ''}`}
+            className={`flex justify-center items-center bg-slate-500 w-16 h-16 cursor-pointer rounded-b-lg hover:bg-slate-700 ${isPencil && type.name === 'pencil' && 'bg-slate-600'} ${isEraser && type.name === 'eraser' && 'bg-slate-600'}`}
         >
             {type.icon}
         </div>
