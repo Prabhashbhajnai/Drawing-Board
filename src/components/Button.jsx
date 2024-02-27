@@ -1,7 +1,7 @@
 import { useCanvas } from "../context/CanvasContext"
 
 const Button = ({ type }) => {
-    const { canvasRef } = useCanvas()
+    const { canvasRef, setIsDrawing, isDrawing, isPencil, setIsPencil } = useCanvas()
 
     const handleClear = () => {
         const canvas = canvasRef.current
@@ -10,8 +10,16 @@ const Button = ({ type }) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
     }
 
+    const handleDraw = () => {
+        setIsPencil(!isPencil)
+    }
+
+    const handleErase = () => {
+
+    }
+
     const handleClick = () => {
-        if (type.name === 'pencil') console.log('Pencil')
+        if (type.name === 'pencil') handleDraw()
         else if (type.name === 'eraser') console.log('Eraser')
         else if (type.name === 'clear') handleClear()
     }

@@ -1,15 +1,16 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+
+// Context
+import { useCanvas } from '../../context/CanvasContext';
 
 // Components
 import ButtonBar from '../../components/ButtonBar';
-import { useCanvas } from '../../context/CanvasContext';
 
 const Home = () => {
     const [initialPostion, setInitialPosition] = useState({ x: 0, y: 0 })
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [isDrawing, setIsDrawing] = useState(false);
 
-    const { canvasRef } = useCanvas()
+    const { canvasRef, isDrawing, isPencil, setIsDrawing } = useCanvas()
 
     const handleMouseMove = (e) => {
         const canvasRect = document.getElementById('drawing-canvas').getBoundingClientRect()
@@ -27,7 +28,7 @@ const Home = () => {
     }
 
     useEffect(() => {
-        if (!isDrawing) return
+        if (!isDrawing || !isPencil) return
 
         const canvas = canvasRef.current
         const ctx = canvas.getContext('2d')
