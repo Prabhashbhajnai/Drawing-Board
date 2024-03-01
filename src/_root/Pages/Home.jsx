@@ -44,10 +44,10 @@ const Home = () => {
         ctx.lineWidth = 5
         ctx.lineCap = 'round'
         ctx.strokeStyle = 'black'
-        
+
         ctx.moveTo(initialPosition.x, initialPosition.y)  // from
         ctx.lineTo(mousePosition.x, mousePosition.y); // to
-        
+
         ctx.stroke(); // draw it!
 
         setInitialPosition({ x: mousePosition.x, y: mousePosition.y });
@@ -66,8 +66,13 @@ const Home = () => {
                     onMouseDown={handleMouseDown}
                     onMouseUp={() => setIsDrawing(false)}
                 />
-                <ButtonBar />
-                <ColorPalette />
+                <div className='flex w-full justify-center gap-5'>
+                    <div className='flex items-center w-2/6 gap-5'>
+                        <div className='w-10 h-10 bg-white' />
+                        <ColorPalette />
+                    </div>
+                    <ButtonBar />
+                </div>
             </div>
         </>
     )
