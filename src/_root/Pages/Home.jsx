@@ -8,7 +8,7 @@ import ButtonBar from '../../components/ButtonBar';
 import ColorPalette from '../../components/ColorPalette';
 
 const Home = () => {
-    const [initialPostion, setInitialPosition] = useState({ x: 0, y: 0 })
+    const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 })
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
     const { canvasRef, isDrawing, isPencil, setIsDrawing, isEraser } = useCanvas()
@@ -36,7 +36,7 @@ const Home = () => {
 
     // for drawing
     useEffect(() => {
-        if (!isDrawing) return
+        if (!isDrawing || (!isPencil && !isEraser)) return
 
         const canvas = canvasRef.current
         const ctx = canvas.getContext('2d')
@@ -44,10 +44,10 @@ const Home = () => {
         ctx.lineWidth = 5
         ctx.lineCap = 'round'
         ctx.strokeStyle = 'black'
-
-        ctx.moveTo(initialPostion.x, initialPostion.y)  // from
+        
+        ctx.moveTo(initialPosition.x, initialPosition.y)  // from
         ctx.lineTo(mousePosition.x, mousePosition.y); // to
-
+        
         ctx.stroke(); // draw it!
 
         setInitialPosition({ x: mousePosition.x, y: mousePosition.y });
