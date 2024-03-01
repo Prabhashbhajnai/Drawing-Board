@@ -5,15 +5,13 @@ import { useCanvas } from '../../context/CanvasContext';
 
 // Components
 import ButtonBar from '../../components/ButtonBar';
+import ColorPalette from '../../components/ColorPalette';
 
 const Home = () => {
     const [initialPostion, setInitialPosition] = useState({ x: 0, y: 0 })
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
     const { canvasRef, isDrawing, isPencil, setIsDrawing, isEraser } = useCanvas()
-    
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
 
     const handleMouseMove = (e) => {
         const canvasRect = document.getElementById('drawing-canvas').getBoundingClientRect()
@@ -28,11 +26,11 @@ const Home = () => {
     const handleMouseDown = () => {
         setInitialPosition({ x: mousePosition.x, y: mousePosition.y })
 
-        if(isPencil) 
-            ctx.globalCompositeOperation = 'source-over'
-        else if(isEraser)
-            ctx.globalCompositeOperation = 'destination-out'
-        
+        if (isPencil)
+            canvasRef.current.getContext('2d').globalCompositeOperation = 'source-over'
+        else if (isEraser)
+            canvasRef.current.getContext('2d').globalCompositeOperation = 'destination-out'
+
         setIsDrawing(true)
     }
 
@@ -40,6 +38,8 @@ const Home = () => {
     useEffect(() => {
         if (!isDrawing) return
 
+        const canvas = canvasRef.current
+        const ctx = canvas.getContext('2d')
         ctx.beginPath()
         ctx.lineWidth = 5
         ctx.lineCap = 'round'
@@ -47,7 +47,7 @@ const Home = () => {
 
         ctx.moveTo(initialPostion.x, initialPostion.y)  // from
         ctx.lineTo(mousePosition.x, mousePosition.y); // to
-        
+
         ctx.stroke(); // draw it!
 
         setInitialPosition({ x: mousePosition.x, y: mousePosition.y });
@@ -67,6 +67,7 @@ const Home = () => {
                     onMouseUp={() => setIsDrawing(false)}
                 />
                 <ButtonBar />
+                <ColorPalette />
             </div>
         </>
     )
