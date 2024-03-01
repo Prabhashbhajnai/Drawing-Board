@@ -10,7 +10,10 @@ const Home = () => {
     const [initialPostion, setInitialPosition] = useState({ x: 0, y: 0 })
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-    const { canvasRef, isDrawing, isPencil, setIsDrawing } = useCanvas()
+    const { canvasRef, isDrawing, isPencil, setIsDrawing, isEraser } = useCanvas()
+    
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
 
     const handleMouseMove = (e) => {
         const canvasRect = document.getElementById('drawing-canvas').getBoundingClientRect()
@@ -24,14 +27,18 @@ const Home = () => {
 
     const handleMouseDown = () => {
         setInitialPosition({ x: mousePosition.x, y: mousePosition.y })
+
+        if(isPencil) 
+            ctx.globalCompositeOperation = 'source-over'
+        else if(isEraser)
+            ctx.globalCompositeOperation = 'destination-out'
+        
         setIsDrawing(true)
     }
 
+    // for drawing
     useEffect(() => {
-        if (!isDrawing || !isPencil) return
-
-        const canvas = canvasRef.current
-        const ctx = canvas.getContext('2d')
+        if (!isDrawing) return
 
         ctx.beginPath()
         ctx.lineWidth = 5
@@ -40,7 +47,7 @@ const Home = () => {
 
         ctx.moveTo(initialPostion.x, initialPostion.y)  // from
         ctx.lineTo(mousePosition.x, mousePosition.y); // to
-
+        
         ctx.stroke(); // draw it!
 
         setInitialPosition({ x: mousePosition.x, y: mousePosition.y });
