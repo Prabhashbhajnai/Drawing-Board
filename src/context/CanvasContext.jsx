@@ -6,9 +6,11 @@ const initialState = {
     isDrawing: false,
     isPencil: false,
     isEraser: false,
+    color: '000000',
     setIsDrawing: () => { },
     setIsPencil: () => { },
-    setIsEraser: () => { }
+    setIsEraser: () => { },
+    setColor: () => { }
 }
 
 // Create a context for the canvas
@@ -23,15 +25,18 @@ const CanvasProvider = ({ children }) => {
     const [isDrawing, setIsDrawing] = useState(false);
     const [isPencil, setIsPencil] = useState(true);
     const [isEraser, setIsEraser] = useState(false);
+    const [color, setColor] = useState('000000');
 
     const value = {
         canvasRef,
         isDrawing,
         isPencil,
         isEraser,
+        color,
         setIsDrawing,
         setIsPencil,
-        setIsEraser
+        setIsEraser,
+        setColor
     }
 
     return (

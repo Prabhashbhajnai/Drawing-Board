@@ -1,4 +1,8 @@
+import { useCanvas } from "../context/CanvasContext";
+
 const ColorPalette = () => {
+    const { setColor } = useCanvas();
+
     const colors = [
         { name: 'black', hex: '000000' },
         { name: 'white', hex: 'ffffff' },
@@ -40,6 +44,7 @@ const ColorPalette = () => {
                         style={{ backgroundColor: `#${color.hex}` }}
                         className="w-5 h-5"
                         key={index}
+                        onClick={() => setColor(color.hex)}
                     />
                 ))}
             </div>
