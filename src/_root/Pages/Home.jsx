@@ -56,16 +56,32 @@ const Home = () => {
     return (
         <>
             <div className='flex flex-col items-center'>
-                <canvas
-                    id='drawing-canvas'
-                    ref={canvasRef}
-                    className='bg-white cursor-'
-                    width={1080}
-                    height={600}
-                    onMouseMove={handleMouseMove}
-                    onMouseDown={handleMouseDown}
-                    onMouseUp={() => setIsDrawing(false)}
-                />
+                <div className='relative'>
+                    <canvas
+                        id='drawing-canvas'
+                        ref={canvasRef}
+                        className='bg-white cursor-none'
+                        width={1080}
+                        height={600}
+                        onMouseMove={handleMouseMove}
+                        onMouseDown={handleMouseDown}
+                        onMouseUp={() => setIsDrawing(false)}
+                    />
+                    <div
+                        id='cursor'
+                        style={{
+                            backgroundColor: `#${color}`,
+                            position: 'absolute',
+                            left: mousePosition.x-4,
+                            top: mousePosition.y-4,
+                            width: '5px',
+                            height: '5px',
+                            borderRadius: '50%',
+                            zIndex: 1000,
+                            pointerEvents: 'none'   // to prevent the cursor from being captured by the cursor div
+                        }}
+                    />
+                </div>
                 <div className='flex w-full justify-center gap-5'>
                     <div className='flex items-center w-2/6 gap-5'>
                         <div
