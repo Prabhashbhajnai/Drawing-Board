@@ -38,9 +38,9 @@ const Home = () => {
     const handleScroll = (e) => {
         e.preventDefault();
 
-        if (e.deltaY > 0 && cursorSize > 5) {
+        if (e.deltaY > 0) {
             setCursorSize(prevCursorSize => Math.max(prevCursorSize - 1, 5)); // Ensure cursorSize doesn't go below 5
-        } else if (e.deltaY < 0 && cursorSize < 23) {
+        } else if (e.deltaY < 0) {
             setCursorSize(prevCursorSize => Math.min(prevCursorSize + 1, 23)); // Ensure cursorSize doesn't go above 23
         }
     }
