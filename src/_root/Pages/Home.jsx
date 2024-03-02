@@ -10,6 +10,7 @@ import ColorPalette from '../../components/ColorPalette';
 const Home = () => {
     const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 })
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [cursorSize, setCursorSize] = useState(5)
 
     const { canvasRef, isDrawing, isPencil, setIsDrawing, isEraser, color } = useCanvas()
 
@@ -34,6 +35,33 @@ const Home = () => {
         setIsDrawing(true)
     }
 
+    const handleScroll = (e) => {
+        e.preventDefault();
+
+        if (e.deltaY > 0 && cursorSize > 5) {
+            setCursorSize(prevCursorSize => Math.max(prevCursorSize - 1, 5)); // Ensure cursorSize doesn't go below 5
+        } else if (e.deltaY < 0 && cursorSize < 23) {
+            setCursorSize(prevCursorSize => Math.min(prevCursorSize + 1, 23)); // Ensure cursorSize doesn't go above 23
+        }
+    }
+
+    useEffect(() => {
+        console.log(cursorSize
+        );
+    }, [cursorSize])
+
+    useEffect(() => {
+        const canvas = canvasRef.current
+
+        if (canvas) {
+            canvas.addEventListener('wheel', handleScroll, { passive: false });
+
+            return () => {
+                canvas.removeEventListener('wheel', handleScroll);
+            };
+        }
+    }, [])
+
     // for drawing
     useEffect(() => {
         if (!isDrawing || (!isPencil && !isEraser)) return
@@ -41,7 +69,7 @@ const Home = () => {
         const canvas = canvasRef.current
         const ctx = canvas.getContext('2d')
         ctx.beginPath()
-        ctx.lineWidth = 5
+        ctx.lineWidth = cursorSize
         ctx.lineCap = 'round'
         ctx.strokeStyle = `#${color}`
 
@@ -60,7 +88,7 @@ const Home = () => {
                     <canvas
                         id='drawing-canvas'
                         ref={canvasRef}
-                        className='bg-white cursor-none'
+                        className='bg-white cursor-none overflow-hidden'
                         width={1080}
                         height={600}
                         onMouseMove={handleMouseMove}
@@ -72,10 +100,10 @@ const Home = () => {
                         style={{
                             backgroundColor: `#${color}`,
                             position: 'absolute',
-                            left: mousePosition.x-4,
-                            top: mousePosition.y-4,
-                            width: '5px',
-                            height: '5px',
+                            left: mousePosition.x,
+                            top: mousePosition.y - 5,
+                            width: `${cursorSize}px`,
+                            height: `${cursorSize}px`,
                             borderRadius: '50%',
                             zIndex: 1000,
                             pointerEvents: 'none'   // to prevent the cursor from being captured by the cursor div
