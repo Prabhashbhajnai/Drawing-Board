@@ -46,11 +46,6 @@ const Home = () => {
     }
 
     useEffect(() => {
-        console.log(cursorSize
-        );
-    }, [cursorSize])
-
-    useEffect(() => {
         const canvas = canvasRef.current
 
         if (canvas) {
@@ -119,6 +114,27 @@ const Home = () => {
                         <ColorPalette />
                     </div>
                     <ButtonBar />
+                    <div className='flex items-center justify-between gap-5'>
+                        <div
+                            id='cursor'
+                            style={{
+                                backgroundColor: '#000000',
+                                width: '5px',
+                                height: '5px',
+                                borderRadius: '50%',
+                            }}
+                        />
+                        <input type='range' min='5' max='23' value={cursorSize} onChange={(e) => setCursorSize(e.target.value)} className='' />
+                        <div
+                            id='cursor'
+                            style={{
+                                backgroundColor: '#000000',
+                                width: '23px',
+                                height: '23px',
+                                borderRadius: '50%',
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         </>
