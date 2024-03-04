@@ -93,7 +93,8 @@ const Home = () => {
                     <div
                         id='cursor'
                         style={{
-                            backgroundColor: `#${color}`,
+                            backgroundColor: isEraser ? 'white' :`#${color}`,
+                            border: isEraser ? '1px solid black' : 'none',
                             position: 'absolute',
                             left: mousePosition.x,
                             top: mousePosition.y - 5,
