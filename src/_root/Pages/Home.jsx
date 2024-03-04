@@ -35,6 +35,7 @@ const Home = () => {
         setIsDrawing(true)
     }
 
+    // for changing the cursor size on scrolling on the canvas
     const handleScroll = (e) => {
         e.preventDefault();
 
@@ -106,15 +107,23 @@ const Home = () => {
                         }}
                     />
                 </div>
+
+                {/* Bottom Bar */}
                 <div className='flex w-full justify-center gap-5'>
-                    <div className='flex items-center w-2/6 gap-5'>
+
+                    {/* Selected Color and Color Palette */}
+                    <div className='flex items-center w-[32%] gap-5'>
                         <div
                             style={{ backgroundColor: `#${color}` }}
                             className="w-10 h-10"
                         />
                         <ColorPalette />
                     </div>
+
+                    {/* Pencil Eraser and Trash Button */}
                     <ButtonBar />
+
+                    {/* Size slider */}
                     <div className='flex items-center justify-between gap-5'>
                         <div
                             id='cursor'
