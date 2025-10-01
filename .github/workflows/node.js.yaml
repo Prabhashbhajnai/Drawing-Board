@@ -1,16 +1,17 @@
+# .github/workflows/deploy.yml
 name: CI/CD Pipeline
 
 on:
-  workflow_dispatch:   # ✅ Manual trigger with dropdowns
-    inputs:
-      environment:
+  workflow_dispatch:
+    inputs: 
+      environment: 
         description: "Select the environment"
         required: true
         default: "dev"
         type: choice
-        options:
-          - dev
-          - prod
+        options: 
+          - "dev"
+          - "prod"
 
       version:
         description: "Select the version (tag/branch/commit)"
@@ -24,23 +25,21 @@ on:
         default: true
         type: boolean
 
-  push:                # ✅ Auto-trigger on code push
-    branches: [ main ]
-
-  pull_request:        # ✅ Auto-trigger on PR open/update
-    types: [opened, synchronize, reopened]
-
-  release:             # ✅ Auto-trigger when a release is published
-    types: [published]
+  push:
+  release:
+  pull_request:
+    types:
+      - opened
+      - closed
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-      - run: npm ci
-      - run: npm run build --if-present
+    - uses: actions/checkout@v5
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+    - run: npm ci
+    - run: npm run build --if-present
