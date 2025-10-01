@@ -1,6 +1,30 @@
-name: CI
+# .github/workflows/deploy.yml
+name: CI/CD Pipeline
 
 on:
+  workflow_dispatch:
+    inputs: 
+      environment: 
+        description: "Select the environment"
+        required: true
+        default: "dev"
+        type: choice
+        options: 
+          - "dev"
+          - "prod"
+
+      version:
+        description: "Select the version (tag/branch/commit)"
+        required: true
+        default: "latest"
+        type: string
+
+      run_tests:
+        description: "Run tests?"
+        required: true
+        default: true
+        type: boolean
+
   push:
   release:
   pull_request:
