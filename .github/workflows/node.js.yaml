@@ -24,6 +24,11 @@ on:
         default: true
         type: boolean
 
+      ecr_deploy:
+        description: "Push image to ECR?"
+        default: false
+        type: boolean
+
   push:
   release:
   pull_request:
