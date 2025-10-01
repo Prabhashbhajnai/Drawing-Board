@@ -6,8 +6,7 @@ on:
     inputs: 
       environment: 
         description: "Select the environment"
-        required: true
-        default: "dev"
+        required: false
         type: choice
         options: 
           - "dev"
@@ -23,6 +22,11 @@ on:
         description: "Run tests?"
         required: true
         default: true
+        type: boolean
+
+      ecr_deploy:
+        description: "Push image to ECR?"
+        default: false
         type: boolean
 
   push:
