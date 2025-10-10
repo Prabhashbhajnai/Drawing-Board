@@ -50,7 +50,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: Build Docker image
         run: |
-          IMAGE_NAME=${{ github.event.repository.name }}   # get branch name
+          IMAGE_NAME=$(echo ${{ github.event.repository.name}} | tr '[:upper:]' '[:lower:]')  # get branch name and change to lowercase
+          # IMAGE_NAME=${{ github.event.repository.name }}   
           PROJECT_VERSION=$(node -p -e "require('./package.json').version")
           echo "Building $IMAGE_NAME"
           docker build -t $IMAGE_NAME:$PROJECT_VERSION .
