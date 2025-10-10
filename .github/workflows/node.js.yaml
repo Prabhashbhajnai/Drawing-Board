@@ -54,4 +54,4 @@ jobs:
           # IMAGE_NAME=${{ github.event.repository.name }}   
           PROJECT_VERSION=$(node -p -e "require('./package.json').version")
           echo "Building $IMAGE_NAME"
-          docker build -t $IMAGE_NAME:$PROJECT_VERSION .
+          echo docker build -t $IMAGE_NAME:$PROJECT_VERSION .
