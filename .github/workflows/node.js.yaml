@@ -48,6 +48,21 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.ecr_deploy == 'true' && github.event.inputs.environment != ''
     steps:
       - uses: actions/checkout@v5
+
+      - name: Extract AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Test AWS Connectivity
+        run: |
+          echo "Checking AWS connection..."
+          aws sts get-caller-identity
+          echo "Listing ECR repositories as a sanity check..."
+          aws ecr describe-repositories || echo "No repositories found (this is fine)"
+          
       - name: Build Docker image
         run: |
           IMAGE_NAME=$(echo ${{ github.event.repository.name}} | tr '[:upper:]' '[:lower:]')  # get branch name and change to lowercase
@@ -55,3 +70,4 @@ jobs:
           PROJECT_VERSION=$(node -p -e "require('./package.json').version")
           echo "Building $IMAGE_NAME"
           docker build -t $IMAGE_NAME:$PROJECT_VERSION .
+
