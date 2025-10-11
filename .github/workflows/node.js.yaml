@@ -84,8 +84,10 @@ jobs:
           
           # Tag image with version
           docker tag $IMAGE_NAME:$PROJECT_VERSION $ECR_REGISTRY/$IMAGE_NAME:$PROJECT_VERSION
+          docker tag $IMAGE_NAME:$PROJECT_VERSION $ECR_REGISTRY/$IMAGE_NAME:latest
 
           # Push image to ECR
           docker push $ECR_REGISTRY/$IMAGE_NAME:$PROJECT_VERSION
+          docker push $ECR_REGISTRY/$IMAGE_NAME:latest
           
-
+          echo "✅ Image pushed successfully to ECR"
