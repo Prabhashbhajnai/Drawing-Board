@@ -12,12 +12,6 @@ on:
           - "dev"
           - "prod"
 
-      version:
-        description: "Select the version (tag/branch/commit)"
-        required: true
-        default: "latest"
-        type: string
-
       run_tests:
         description: "Run tests?"
         required: true
@@ -26,7 +20,7 @@ on:
 
       ecr_deploy:
         description: "Push image to ECR?"
-        default: false
+        default: true
         type: boolean
 
   push:
@@ -47,3 +41,17 @@ jobs:
         node-version: '20.x'
     - run: npm ci
     - run: npm run build --if-present
+
+  ecr-deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.ecr_deploy == 'true' && github.event.inputs.environment != ''
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build Docker image
+        run: |
+          IMAGE_NAME=$(echo ${{ github.event.repository.name}} | tr '[:upper:]' '[:lower:]')  # get branch name and change to lowercase
+          # IMAGE_NAME=${{ github.event.repository.name }}   
+          PROJECT_VERSION=$(node -p -e "require('./package.json').version")
+          echo "Building $IMAGE_NAME"
+          docker build -t $IMAGE_NAME:$PROJECT_VERSION .
