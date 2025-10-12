@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: "2010-09-09" 
+Description: React-App Infrastructure
+
+Parameters:
+    BucketName:
+        Type: String
+        Description: Name of S3 Bucket to store the react-build
+
+Resources:
+    ReactAppBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: !Ref BucketName
+            AccessControl: PublicRead
+            WebsiteConfiguration:
+                IndexDocument: index.html
+                ErrorDocument: index.html
+            PublicAccessBlockConfiguration:
+                BlockPublicAcls: false
+                BlockPublicPolicy: false
+                IgnorePublicAcls: false
+                RestrictPublicBuckets: false
+    
+    ReactAppBucketPolicy:
+        Type: AWS::S3::BucketPolicy
+        Properties:
+            Bucket: !Ref ReactAppBucket
+            PolicyDocument: 
+                Version: "2012-10-17"
+                Statement:
+                - Sid: PublicReadForWebsite
+                Effect: Allow
+                Principal: "*"
+                Action: "s3:GetObject"
+                Resource: !Sub "${ReactAppBucket.Arn}/*"
+            
+Outputs:
+  WebsiteURL:
+    Description: URL of the hosted React app
+    Value: !GetAtt ReactAppBucket.WebsiteURL

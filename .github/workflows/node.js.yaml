@@ -19,7 +19,12 @@ on:
         type: boolean
 
       ecr_deploy:
-        description: "Push image to ECR?"
+        description: "Push image to ECR"
+        default: true
+        type: boolean
+
+      s3_deploy:
+        description: "Deploy to host on S3"
         default: true
         type: boolean
 
@@ -91,3 +96,39 @@ jobs:
           docker push $ECR_REGISTRY/$IMAGE_NAME:latest
           
           echo "✅ Image pushed successfully to ECR"
+
+  s3-deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.s3_deploy == 'true' && github.event.inputs.environment != ''
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Validate cloudformation template
+        run: |
+          aws cloudformation validate-template --template-body file://template.yaml
+          echo "✅ CloudFormation template is valid"
+
+      - name: Extract AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+        
+      - name: Deploy CloudFormation stack
+        run: |
+          PROJECT_NAME=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')
+          echo "BUCKET_NAME=react-app-${{ github.event.inputs.environment }}-${PROJECT_NAME}" >> $GITHUB_ENV
+          echo "Deploying CloudFormation stack with S3 bucket: $BUCKET_NAME"
+          aws cloudformation deploy --template-file template.yaml \
+            --stack-name ${PROJECT_NAME}-stack-${{ github.event.inputs.environment }} \
+            --parameter-overrides BucketName=$BUCKET_NAME \
+            --region=ap-south-1
+          echo "✅ CloudFormatin stack deployed successfully"
+
+      - name: Sync build to S3
+        run: |
+          echo "Syncing build to S3 bucket: $BUCKET_NAME"
+          aws s3 sync ./dist s3://$BUCKET_NAME --delete
+      
