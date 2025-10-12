@@ -31,10 +31,10 @@ Resources:
                 Version: "2012-10-17"
                 Statement:
                 - Sid: PublicReadForWebsite
-                Effect: Allow
-                Principal: "*"
-                Action: "s3:GetObject"
-                Resource: !Sub "${ReactAppBucket.Arn}/*"
+                  Effect: Allow
+                  Principal: "*"
+                  Action: "s3:GetObject"
+                  Resource: !Sub "${ReactAppBucket.Arn}/*"
             
 Outputs:
   WebsiteURL:
