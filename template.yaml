@@ -11,11 +11,9 @@ Resources:
         Type: AWS::S3::Bucket
         Properties:
             BucketName: !Ref BucketName
-            PublicAccessBlockConfiguration:
-            BlockPublicAcls: false
             OwnershipControls:
-            Rules:
-                - ObjectOwnership: ObjectWriter
+                Rules:
+                    - ObjectOwnership: ObjectWriter
             WebsiteConfiguration:
                 IndexDocument: index.html
                 ErrorDocument: index.html
