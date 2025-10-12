@@ -46,6 +46,10 @@ jobs:
         node-version: '20.x'
     - run: npm ci
     - run: npm run build --if-present
+    - uses: actions/upload-artifact@v3
+      with:
+        name: react-build
+        path: ./dist
 
   ecr-deploy:
     runs-on: ubuntu-latest
@@ -103,6 +107,10 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.s3_deploy == 'true' && github.event.inputs.environment != ''
     steps:
       - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v3
+        with:
+          name: react-build
+          path: ./dist
 
       - name: Extract AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
